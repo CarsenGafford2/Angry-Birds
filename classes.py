@@ -1,3 +1,4 @@
+import time
 import pygame
 from pygame.locals import *
 
@@ -26,7 +27,6 @@ def post_solve_bird_pig(arbiter, space, _):
     for obj in Game.objects:
         if obj.body == pig.body:
             Game.objects.remove(obj)
-
     Game.score += 10000
 
 
@@ -39,7 +39,6 @@ def post_solve_bird_wood(arbiter, space, _):
         for obj in Game.objects:
             if obj.body == wood.body:
                 Game.objects.remove(obj)
-
         Game.score += 5000
 
 
@@ -76,14 +75,14 @@ class Circle(Object):
 
 
 class Bird(Circle):
-    img = pygame.image.load('bird.png').convert_alpha()
+    img = pygame.image.load('img/bird.png').convert_alpha()
 
     def __init__(self, pos):
         super().__init__(pos, type=2)
 
 
 class Pig(Circle):
-    img = pygame.image.load('pig.png').convert_alpha()
+    img = pygame.image.load('img/pig.png').convert_alpha()
     img = pygame.transform.scale(img, (64, 64))
     
     def __init__(self, pos=(100, 100)):
@@ -101,11 +100,11 @@ class Rectangle(Object):
 
 
 class Beam(Rectangle):
-    img = pygame.image.load('beam.png').convert_alpha()
+    img = pygame.image.load('img/beam.png').convert_alpha()
 
 
 class Column(Rectangle):
-    img = pygame.image.load('column.png').convert_alpha()
+    img = pygame.image.load('img/column.png').convert_alpha()
 
 
 class Game:
@@ -150,7 +149,7 @@ class Game:
         if event.type == KEYDOWN:
             if K_1 <= event.key <= K_9:
                 i = int(event.unicode)
-                self.set_level(i)
+                self.set_level(1)
             
             if event.key == K_d:
                 self.debug = not self.debug
@@ -162,6 +161,9 @@ class Game:
         v = (Vec2d(p0[0], p0[1]) - Vec2d(p1[0], p1[1])) * 10
         b = Bird(pos=p1)
         b.body.apply_impulse_at_local_point(v)
+        time.sleep(10)
+        #Return reward here
+        pygame.quit()
             
     def set_level(self, level):
         """Set player level."""
@@ -177,24 +179,3 @@ class Game:
             Column((1060, 200))
             Beam((1030, 245))
             Pig((1140, 60))
-
-        elif level == 2:
-            for i in range(2):
-                Column((1000, 60 + i*100))
-                Column((1060, 60 + i*100))
-                Beam((1030, 105 + i*100))
-            Pig((1000, 60))
-
-        elif level == 3:
-            for x in range(500, 800, 30):
-                Column((x, 60))
-            Pig((850, 60))
-
-        elif level == 4:
-            Column((500, 60))
-            for x in range(500, 700, 85):
-                Column((x+83, 60))
-                Beam((x+40, 105))
-                Pig((x+40, 50))
-
-            Pig((850, 100))
