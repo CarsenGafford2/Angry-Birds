@@ -161,9 +161,6 @@ class Game:
         v = (Vec2d(p0[0], p0[1]) - Vec2d(p1[0], p1[1])) * 10
         b = Bird(pos=p1)
         b.body.apply_impulse_at_local_point(v)
-        time.sleep(10)
-        #Return reward here
-        pygame.quit()
             
     def set_level(self, level):
         """Set player level."""
